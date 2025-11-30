@@ -1,147 +1,136 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rethink Contacts</title>
-<style>
-  body { font-family: Arial, sans-serif; background:#f4f7fb; margin:0; padding:0; }
-  .container { max-width: 900px; margin: 20px auto; display: flex; gap: 20px; flex-wrap: wrap; }
-  .card { background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); flex: 1; min-width: 300px; }
-  h1,h2 { margin:0 0 10px 0; }
-  input, textarea { width:100%; padding:8px 10px; margin:5px 0; border-radius:6px; border:1px solid #ccc; }
-  button { padding:8px 12px; border:none; border-radius:6px; cursor:pointer; background:#0b76ff; color:#fff; margin-top:5px; }
-  button.secondary { background:#fff; color:#0b76ff; border:1px solid #0b76ff; }
-  ul { list-style:none; padding:0; }
-  li { border:1px solid #eef2ff; padding:10px; border-radius:6px; margin-bottom:8px; background:#fbfdff; }
-  .message { margin-top:10px; padding:10px; border-radius:6px; display:none; }
-  .message.success { background:#ecfdf5; color:#28a745; border:1px solid #28a74533; }
-  .message.error { background:#fff5f5; color:#d9534f; border:1px solid #d9534f33; }
-</style>
+    <meta charset="UTF-8">
+    <title>Contact Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f6f6f6;
+        }
+        h2 {
+            color: #007bff;
+        }
+        form {
+            margin-bottom: 20px;
+            background: #fff;
+            padding: 15px;
+            width: 350px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            background: #fff;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        th {
+            background: #007bff;
+            color: white;
+        }
+    </style>
 </head>
 <body>
 
-<h1 style="text-align:center;">Rethink Contacts</h1>
+<h2>Contact Form</h2>
 
-<div class="container">
-  <!-- Contacts List -->
-  <div class="card">
-    <h2>Contacts</h2>
-    <button id="refreshBtn">Refresh</button>
-    <button class="secondary" id="clearBtn">Clear</button>
-    <ul id="contactList"></ul>
-  </div>
+<form id="contactForm" >
+    <input type="text" id="name" placeholder="Full Name" required>
+    <input type="email" id="email" placeholder="Email">
+    <input type="text" id="contactNo" placeholder="Contact Number" required>
+    <input type="text" id="location" placeholder="Location">
+    <textarea id="description" placeholder="Description (optional)"></textarea>
+    <button type="submit">Save Contact</button>
+</form>
 
-  <!-- Add Contact Form -->
-  <div class="card">
-    <h2>Add Contact</h2>
-    <form id="contactForm" autocomplete="off">
-      <input type="text" id="name" placeholder="Name" required>
-      <input type="text" id="contactNo" placeholder="Contact No" required>
-      <input type="email" id="email" placeholder="Email (optional)">
-      <input type="text" id="location" placeholder="Location (optional)">
-      <textarea id="description" rows="4" placeholder="Description (optional)"></textarea>
-      <button type="submit">Save Contact</button>
-    </form>
-    <div id="msg" class="message"></div>
-  </div>
-</div>
+<h3>Contacts List</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Contact No</th>
+            <th>Location</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody id="contactTable"></tbody>
+</table>
 
 <script>
-const API_URL = "https://rethinkcontact1-app.onrender.com";
-const contactList = document.getElementById("contactList");
-const msgEl = document.getElementById("msg");
-const refreshBtn = document.getElementById("refreshBtn");
-const clearBtn = document.getElementById("clearBtn");
+    const API_URL = "https://rethinkcontact1-app.onrender.com/contacts";
 
-// Show message
-function showMessage(text, type="success", timeout=3000){
-  msgEl.className = "message " + type;
-  msgEl.textContent = text;
-  msgEl.style.display = "block";
-  setTimeout(()=>{ msgEl.style.display="none"; }, timeout);
-}
+    function loadContacts() {
+        fetch(API_URL)
+            .then(res => res.json())
+            .then(data => {
+                const table = document.getElementById("contactTable");
+                table.innerHTML = "";
+                data.forEach(contact => {
+                    table.innerHTML += `
+                        <tr>
+                            <td>${contact.name}</td>
+                            <td>${contact.email || ''}</td>
+                            <td>${contact.contactNo}</td>
+                            <td>${contact.location || ''}</td>
+                            <td>${contact.description || ''}</td>
+                        </tr>`;
+                });
+            })
+            .catch(err => console.error("Error fetching contacts:", err));
+    }
 
-// Escape HTML
-function escapeHtml(str){
-  return String(str).replaceAll("&","&amp;").replaceAll("<","&lt;")
-                   .replaceAll(">","&gt;").replaceAll('"',"&quot;")
-                   .replaceAll("'","&#39;");
-}
+    document.getElementById("contactForm").addEventListener("submit", function(e) {
+        e.preventDefault();
 
-// Display contacts
-function displayContacts(contacts){
-  contactList.innerHTML = "";
-  if(!contacts || contacts.length===0){
-    contactList.innerHTML = `<li style="color:#666;">No contacts found.</li>`;
-    return;
-  }
-  contacts.forEach(c=>{
-    const li = document.createElement("li");
-    li.innerHTML = `<strong>${escapeHtml(c.name)}</strong> - ${escapeHtml(c.contactNo)}<br>
-                    Email: ${escapeHtml(c.email||"-")}<br>
-                    Location: ${escapeHtml(c.location||"-")}<br>
-                    Description: ${escapeHtml(c.description||"-")}`;
-    contactList.appendChild(li);
-  });
-}
+        const newContact = {
+            name: document.getElementById("name").value,
+            email: document.getElementById("email").value,
+            contactNo: document.getElementById("contactNo").value,
+            location: document.getElementById("location").value,
+            description: document.getElementById("description").value
+        };
 
-// Fetch contacts from backend
-async function fetchContacts(){
-  try{
-    const res = await fetch(API_URL);
-    if(!res.ok) throw new Error(`Error: ${res.status}`);
-    const data = await res.json();
-    displayContacts(data);
-  } catch(err){
-    console.error(err);
-    showMessage("Failed to fetch contacts", "error", 4000);
-  }
-}
-
-// Save new contact
-async function saveContact(contact){
-  try{
-    const res = await fetch(API_URL,{
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify(contact)
+        fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(newContact)
+        })
+        .then(res => res.json())
+        .then(() => {
+            alert("Contact Saved Successfully!");
+            loadContacts();
+        })
+        .catch(err => console.error("Error saving contact:", err));
     });
-    if(!res.ok) throw new Error(`Error: ${res.status}`);
-    const saved = await res.json();
-    showMessage("Contact saved!", "success", 3000);
-    return saved;
-  } catch(err){
-    console.error(err);
-    showMessage("Failed to save contact", "error", 4000);
-  }
-}
 
-// Form submit
-document.getElementById("contactForm").addEventListener("submit", async (e)=>{
-  e.preventDefault();
-  const contact = {
-    name: document.getElementById("name").value.trim(),
-    contactNo: document.getElementById("contactNo").value.trim(),
-    email: document.getElementById("email").value.trim(),
-    location: document.getElementById("location").value.trim(),
-    description: document.getElementById("description").value.trim()
-  };
-  if(!contact.name || !contact.contactNo){
-    showMessage("Name and Contact No required", "error");
-    return;
-  }
-  await saveContact(contact);
-  e.target.reset();
-  fetchContacts();
-});
-
-// Buttons
-refreshBtn.addEventListener("click", fetchContacts);
-clearBtn.addEventListener("click", ()=>{ contactList.innerHTML=""; });
-
-// Initial load
-fetchContacts();
+    // Load existing contacts
+    loadContacts();
 </script>
 
 </body>
