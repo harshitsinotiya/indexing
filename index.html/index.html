@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -59,7 +58,7 @@
 
 <h2>Contact Form</h2>
 
-<form id="contactForm" >
+<form id="contactForm">
     <input type="text" id="name" placeholder="Full Name" required>
     <input type="email" id="email" placeholder="Email">
     <input type="text" id="contactNo" placeholder="Contact Number" required>
@@ -85,9 +84,13 @@
 <script>
     const API_URL = "https://rethinkcontact1-app.onrender.com/contacts";
 
+    // Load all contacts from backend
     function loadContacts() {
         fetch(API_URL)
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error('Network response was not ok');
+                return res.json();
+            })
             .then(data => {
                 const table = document.getElementById("contactTable");
                 table.innerHTML = "";
@@ -105,6 +108,7 @@
             .catch(err => console.error("Error fetching contacts:", err));
     }
 
+    // Handle form submission
     document.getElementById("contactForm").addEventListener("submit", function(e) {
         e.preventDefault();
 
@@ -121,15 +125,19 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(newContact)
         })
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) throw new Error('Failed to save contact');
+            return res.json();
+        })
         .then(() => {
             alert("Contact Saved Successfully!");
+            document.getElementById("contactForm").reset();
             loadContacts();
         })
         .catch(err => console.error("Error saving contact:", err));
     });
 
-    // Load existing contacts
+    // Load contacts on page load
     loadContacts();
 </script>
 
