@@ -2,144 +2,572 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact Management</title>
     <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #4cc9f0;
+            --success: #4ade80;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f6f6f6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+            color: var(--dark);
         }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: var(--secondary);
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .subtitle {
+            color: var(--gray);
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .form-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .form-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .form-icon {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
         h2 {
-            color: green;
+            color: var(--dark);
+            font-size: 1.8rem;
         }
-        form {
+
+        .input-group {
             margin-bottom: 20px;
-            background: #fff;
-            padding: 15px;
-            width: 350px;
-            border-radius: 8px;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
         }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--secondary);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
         input, textarea {
             width: 100%;
-            padding: 8px;
-            margin: 6px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+            padding: 14px 16px;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
         }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.1);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .required::after {
+            content: " *";
+            color: #ff4757;
+        }
+
         button {
-            background: #007bff;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
-            padding: 10px;
-            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-            border-radius: 4px;
-        }
-        button:hover {
-            background: #0056b3;
-        }
-        table {
-            border-collapse: collapse;
+            transition: var(--transition);
             width: 100%;
-            background: #fff;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
         }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
         }
-        th {
-            background: #007bff;
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .table-container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+
+        .table-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .table-icon {
+            background: linear-gradient(135deg, var(--success), #22c55e);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
+            font-size: 1.5rem;
+        }
+
+        h3 {
+            color: var(--dark);
+            font-size: 1.8rem;
+        }
+
+        .contacts-count {
+            background: var(--light-gray);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-left: auto;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            border: 1px solid var(--light-gray);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        thead {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        th {
+            color: white;
+            padding: 18px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+        th:first-child {
+            border-top-left-radius: 11px;
+        }
+
+        th:last-child {
+            border-top-right-radius: 11px;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--light-gray);
+            transition: var(--transition);
+        }
+
+        tbody tr:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        td {
+            padding: 18px 16px;
+            color: var(--dark);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray);
+        }
+
+        .empty-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            padding: 20px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .form-container, .table-container {
+                padding: 25px;
+            }
+            
+            th, td {
+                padding: 14px 12px;
+            }
+        }
+
+        .success-message {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: var(--success);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            transform: translateX(150%);
+            transition: transform 0.4s ease;
+            z-index: 1000;
+        }
+
+        .success-message.show {
+            transform: translateX(0);
+        }
+
+        .loading {
+            position: relative;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .loading::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 3px solid var(--light-gray);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <h1>Contact Manager</h1>
+            <p class="subtitle">Manage your contacts efficiently and securely</p>
+        </header>
 
-<h2>Contact Form</h2>
+        <div class="main-content">
+            <div class="form-container">
+                <div class="form-header">
+                    <div class="form-icon">📝</div>
+                    <h2>Add New Contact</h2>
+                </div>
+                
+                <form id="contactForm">
+                    <div class="input-group">
+                        <label for="name" class="required">Full Name</label>
+                        <input type="text" id="name" placeholder="Enter full name" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" placeholder="Enter email address">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="contactNo" class="required">Contact Number</label>
+                        <input type="text" id="contactNo" placeholder="Enter phone number" required>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" placeholder="Enter city or address">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" placeholder="Additional notes or details (optional)"></textarea>
+                    </div>
+                    
+                    <button type="submit" id="submitBtn">
+                        <span id="buttonText">Save Contact</span>
+                    </button>
+                </form>
+            </div>
 
-<form id="contactForm">
-    <input type="text" id="name" placeholder="Full Name" required>
-    <input type="email" id="email" placeholder="Email">
-    <input type="text" id="contactNo" placeholder="Contact Number" required>
-    <input type="text" id="location" placeholder="Location">
-    <textarea id="description" placeholder="Description (optional)"></textarea>
-    <button type="submit">Save Contact</button>
-</form>
+            <div class="table-container">
+                <div class="table-header">
+                    <div class="table-icon">👥</div>
+                    <h3>Contacts List</h3>
+                    <div class="contacts-count" id="contactsCount">0 contacts</div>
+                </div>
+                
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Contact No</th>
+                                <th>Location</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contactTable">
+                            <!-- Contacts will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-<h3>Contacts List</h3>
-<table>
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Contact No</th>
-            <th>Location</th>
-            <th>Description</th>
-        </tr>
-    </thead>
-    <tbody id="contactTable"></tbody>
-</table>
+        <footer>
+            <p>Contact Management System • All data is securely stored</p>
+        </footer>
+    </div>
 
-<script>
-  const API_URL = "https://subintentionally-skint-cayden.ngrok-free.dev/contacts";
+    <div class="success-message" id="successMessage">Contact saved successfully!</div>
 
-// Load all contacts from backend
-function loadContacts() {
-    fetch(API_URL, {
-        headers: { "ngrok-skip-browser-warning": "true" }
-    })
-    .then(res => res.json())
-    .then(data => {
-        const table = document.getElementById("contactTable");
-        table.innerHTML = "";
-        data.forEach(contact => {
-            table.innerHTML += `
-                <tr>
-                    <td>${contact.name}</td>
-                    <td>${contact.email || ''}</td>
-                    <td>${contact.contactNo}</td>
-                    <td>${contact.location || ''}</td>
-                    <td>${contact.description || ''}</td>
-                </tr>`;
+    <script>
+        const API_URL = "https://subintentionally-skint-cayden.ngrok-free.dev/contacts";
+        
+        // DOM Elements
+        const contactForm = document.getElementById('contactForm');
+        const contactTable = document.getElementById('contactTable');
+        const contactsCount = document.getElementById('contactsCount');
+        const successMessage = document.getElementById('successMessage');
+        const submitBtn = document.getElementById('submitBtn');
+        const buttonText = document.getElementById('buttonText');
+
+        // Show success message
+        function showSuccessMessage() {
+            successMessage.classList.add('show');
+            setTimeout(() => {
+                successMessage.classList.remove('show');
+            }, 3000);
+        }
+
+        // Show loading state
+        function showLoading() {
+            submitBtn.classList.add('loading');
+            buttonText.textContent = 'Saving...';
+        }
+
+        // Hide loading state
+        function hideLoading() {
+            submitBtn.classList.remove('loading');
+            buttonText.textContent = 'Save Contact';
+        }
+
+        // Format phone number (optional)
+        function formatPhoneNumber(phone) {
+            return phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+        }
+
+        // Load all contacts from backend
+        function loadContacts() {
+            fetch(API_URL, {
+                headers: { "ngrok-skip-browser-warning": "true" }
+            })
+            .then(res => {
+                if (!res.ok) throw new Error('Network response was not ok');
+                return res.json();
+            })
+            .then(data => {
+                contactTable.innerHTML = '';
+                
+                if (data.length === 0) {
+                    contactTable.innerHTML = `
+                        <tr>
+                            <td colspan="5">
+                                <div class="empty-state">
+                                    <div class="empty-icon">📭</div>
+                                    <p>No contacts found. Add your first contact!</p>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    contactsCount.textContent = '0 contacts';
+                    return;
+                }
+                
+                // Update count
+                contactsCount.textContent = `${data.length} ${data.length === 1 ? 'contact' : 'contacts'}`;
+                
+                // Add contacts to table
+                data.forEach(contact => {
+                    const row = document.createElement('tr');
+                    
+                    row.innerHTML = `
+                        <td><strong>${contact.name}</strong></td>
+                        <td>${contact.email || '<span style="color: var(--gray); font-style: italic;">Not provided</span>'}</td>
+                        <td>${contact.contactNo}</td>
+                        <td>${contact.location || '<span style="color: var(--gray); font-style: italic;">Not specified</span>'}</td>
+                        <td>${contact.description || '<span style="color: var(--gray); font-style: italic;">No description</span>'}</td>
+                    `;
+                    
+                    contactTable.appendChild(row);
+                });
+            })
+            .catch(err => {
+                console.error("Error fetching contacts:", err);
+                contactTable.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="color: #ff4757; text-align: center; padding: 40px;">
+                            Unable to load contacts. Please check your connection.
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Handle form submission
+        contactForm.addEventListener("submit", function(e) {
+            e.preventDefault();
+            
+            const newContact = {
+                name: document.getElementById("name").value.trim(),
+                email: document.getElementById("email").value.trim(),
+                contactNo: document.getElementById("contactNo").value.trim(),
+                location: document.getElementById("location").value.trim(),
+                description: document.getElementById("description").value.trim()
+            };
+
+            // Validation
+            if (!newContact.name || !newContact.contactNo) {
+                alert("Please fill in all required fields (Name and Contact Number).");
+                return;
+            }
+
+            showLoading();
+
+            fetch(API_URL, {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json",
+                    "ngrok-skip-browser-warning": "true" 
+                },
+                body: JSON.stringify(newContact)
+            })
+            .then(res => {
+                if (!res.ok) throw new Error('Failed to save contact');
+                return res.json();
+            })
+            .then(() => {
+                showSuccessMessage();
+                contactForm.reset();
+                loadContacts();
+            })
+            .catch(err => {
+                console.error("Error saving contact:", err);
+                alert("Failed to save contact. Please try again.");
+            })
+            .finally(() => {
+                hideLoading();
+            });
         });
-    })
-    .catch(err => console.error("Error fetching contacts:", err));
-}
 
-// Handle form submission
-document.getElementById("contactForm").addEventListener("submit", function(e) {
-    e.preventDefault();
+        // Load contacts on page load
+        document.addEventListener('DOMContentLoaded', loadContacts);
 
-    const newContact = {
-        name: document.getElementById("name").value,
-        email: document.getElementById("email").value,
-        contactNo: document.getElementById("contactNo").value,
-        location: document.getElementById("location").value,
-        description: document.getElementById("description").value
-    };
-
-    fetch(API_URL, {
-        method: "POST",
-        headers: { 
-            "Content-Type": "application/json",
-            "ngrok-skip-browser-warning": "true" 
-        },
-        body: JSON.stringify(newContact)
-    })
-    .then(res => res.json())
-    .then(() => {
-        alert("Contact Saved Successfully!");
-        document.getElementById("contactForm").reset();
-        loadContacts();
-    })
-    .catch(err => console.error("Error saving contact:", err));
-});
-
-// Load contacts on page load
-loadContacts();
-
-</script>
-
+        // Auto-refresh contacts every 30 seconds (optional)
+        setInterval(loadContacts, 30000);
+    </script>
 </body>
 </html>
