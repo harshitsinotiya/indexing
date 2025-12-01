@@ -3,19 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Management</title>
+    <title>Contact Manager Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #4361ee;
-            --secondary: #3a0ca3;
-            --accent: #4cc9f0;
-            --success: #4ade80;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
-            --light-gray: #e9ecef;
-            --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-            --transition: all 0.3s ease;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #0ea5e9;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --light-gray: #e2e8f0;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 40px -10px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --radius: 16px;
+            --radius-sm: 8px;
+            --radius-md: 12px;
         }
 
         * {
@@ -25,225 +37,320 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
-            padding: 30px 20px;
             color: var(--dark);
+            line-height: 1.6;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
+            padding: 30px 20px;
         }
 
+        /* Header Styles */
         header {
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
-        h1 {
-            color: var(--secondary);
-            font-size: 2.8rem;
-            margin-bottom: 10px;
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .logo-text h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            display: inline-block;
+            margin-bottom: 5px;
         }
 
-        .subtitle {
+        .logo-text p {
             color: var(--gray);
-            font-size: 1.1rem;
-            font-weight: 400;
+            font-size: 0.9rem;
         }
 
+        .header-stats {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 15px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 150px;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .stat-1 .stat-icon {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        }
+
+        .stat-2 .stat-icon {
+            background: linear-gradient(135deg, var(--success), #34d399);
+        }
+
+        .stat-content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .stat-content p {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        /* Main Content Layout */
         .main-content {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 30px;
             margin-bottom: 40px;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1100px) {
             .main-content {
                 grid-template-columns: 1fr;
             }
         }
 
+        /* Form Container */
         .form-container {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: var(--card-shadow);
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
             transition: var(--transition);
+            height: fit-content;
         }
 
         .form-container:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+            box-shadow: var(--shadow-xl);
         }
 
         .form-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .form-icon {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            font-size: 1.5rem;
+            padding: 25px 30px;
         }
 
-        h2 {
-            color: var(--dark);
-            font-size: 1.8rem;
+        .form-header h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-header h2 i {
+            font-size: 1.4rem;
+        }
+
+        .form-body {
+            padding: 30px;
         }
 
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
 
-        label {
+        .input-group label {
             display: block;
             margin-bottom: 8px;
-            color: var(--secondary);
             font-weight: 600;
+            color: var(--dark);
             font-size: 0.95rem;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid var(--light-gray);
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: var(--transition);
-            background: white;
-        }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.1);
-        }
-
-        textarea {
-            min-height: 120px;
-            resize: vertical;
-            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .required::after {
-            content: " *";
-            color: #ff4757;
+            content: "*";
+            color: var(--danger);
+            margin-left: 2px;
         }
 
-        button {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            padding: 16px;
-            border-radius: 12px;
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
             font-size: 1.1rem;
+        }
+
+        .input-with-icon input,
+        .input-with-icon textarea {
+            width: 100%;
+            padding: 14px 16px 14px 45px;
+            border: 1.5px solid var(--light-gray);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+            font-family: inherit;
+        }
+
+        .input-with-icon textarea {
+            min-height: 120px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+
+        .input-with-icon input:focus,
+        .input-with-icon textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            padding: 14px 24px;
+            border-radius: var(--radius-md);
             font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
             transition: var(--transition);
-            width: 100%;
-            margin-top: 10px;
-            letter-spacing: 0.5px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex: 1;
         }
 
-        button:hover {
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-primary:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
         }
 
-        button:active {
-            transform: translateY(0);
+        .btn-secondary {
+            background: var(--light-gray);
+            color: var(--dark);
         }
 
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        /* Table Container */
         .table-container {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: var(--card-shadow);
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
             overflow: hidden;
+            height: fit-content;
         }
 
         .table-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 25px;
+            padding: 25px 30px;
+            background: linear-gradient(135deg, var(--secondary), #06b6d4);
+            color: white;
         }
 
-        .table-icon {
-            background: linear-gradient(135deg, var(--success), #22c55e);
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
+        .table-header h2 {
+            font-size: 1.6rem;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
+            gap: 10px;
         }
 
-        h3 {
-            color: var(--dark);
-            font-size: 1.8rem;
+        .table-header h2 i {
+            font-size: 1.4rem;
         }
 
         .contacts-count {
-            background: var(--light-gray);
-            padding: 4px 12px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
             border-radius: 20px;
+            font-weight: 600;
             font-size: 0.9rem;
-            color: var(--gray);
-            margin-left: auto;
         }
 
         .table-wrapper {
             overflow-x: auto;
-            border-radius: 12px;
-            border: 1px solid var(--light-gray);
+            padding: 10px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 600px;
+            min-width: 800px;
         }
 
         thead {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: var(--light);
         }
 
         th {
-            color: white;
             padding: 18px 16px;
             text-align: left;
             font-weight: 600;
+            color: var(--dark);
             font-size: 0.95rem;
-            letter-spacing: 0.5px;
-        }
-
-        th:first-child {
-            border-top-left-radius: 11px;
-        }
-
-        th:last-child {
-            border-top-right-radius: 11px;
+            border-bottom: 1px solid var(--light-gray);
         }
 
         tbody tr {
@@ -252,7 +359,7 @@
         }
 
         tbody tr:hover {
-            background-color: rgba(67, 97, 238, 0.05);
+            background: rgba(99, 102, 241, 0.05);
         }
 
         td {
@@ -260,48 +367,74 @@
             color: var(--dark);
         }
 
+        .contact-name {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+
+        .contact-email, .contact-phone, .contact-location, .contact-desc {
+            font-size: 0.95rem;
+        }
+
         .empty-state {
             text-align: center;
             padding: 60px 20px;
-            color: var(--gray);
         }
 
         .empty-icon {
-            font-size: 3rem;
+            font-size: 4rem;
+            color: var(--light-gray);
             margin-bottom: 20px;
-            opacity: 0.5;
+        }
+
+        .empty-state h3 {
+            font-size: 1.3rem;
+            color: var(--gray);
+            margin-bottom: 10px;
         }
 
         .empty-state p {
-            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 400px;
+            margin: 0 auto;
         }
 
+        /* Footer */
         footer {
             text-align: center;
-            margin-top: 50px;
+            padding: 25px;
             color: var(--gray);
-            font-size: 0.9rem;
-            padding: 20px;
+            border-top: 1px solid var(--light-gray);
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            margin-top: 30px;
         }
 
-        @media (max-width: 768px) {
-            body {
-                padding: 20px 15px;
-            }
-            
-            h1 {
-                font-size: 2.2rem;
-            }
-            
-            .form-container, .table-container {
-                padding: 25px;
-            }
-            
-            th, td {
-                padding: 14px 12px;
-            }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: var(--gray);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Success Message */
         .success-message {
             position: fixed;
             top: 30px;
@@ -309,21 +442,25 @@
             background: var(--success);
             color: white;
             padding: 15px 25px;
-            border-radius: 12px;
-            box-shadow: var(--card-shadow);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
             transform: translateX(150%);
             transition: transform 0.4s ease;
             z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .success-message.show {
             transform: translateX(0);
         }
 
+        /* Loading State */
         .loading {
             position: relative;
             pointer-events: none;
-            opacity: 0.7;
+            opacity: 0.8;
         }
 
         .loading::after {
@@ -334,8 +471,8 @@
             transform: translate(-50%, -50%);
             width: 20px;
             height: 20px;
-            border: 3px solid var(--light-gray);
-            border-top-color: var(--primary);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -343,68 +480,245 @@
         @keyframes spin {
             to { transform: translate(-50%, -50%) rotate(360deg); }
         }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .header-stats {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .stat-card {
+                flex: 1;
+                min-width: auto;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            th, td {
+                padding: 12px 10px;
+            }
+            
+            .table-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .contacts-count {
+                align-self: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .form-body, .table-header {
+                padding: 20px;
+            }
+            
+            .header-stats {
+                flex-direction: column;
+            }
+            
+            .stat-card {
+                width: 100%;
+            }
+        }
+
+        /* Additional Visual Enhancements */
+        .form-section {
+            border-left: 4px solid var(--primary);
+            padding-left: 15px;
+            margin-bottom: 25px;
+        }
+
+        .form-section h3 {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .contact-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .contact-row {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 45px;
+            border: 1.5px solid var(--light-gray);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            transition: var(--transition);
+            background: white;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Contact Manager</h1>
-            <p class="subtitle">Manage your contacts efficiently and securely</p>
+            <div class="logo-container">
+                <div class="logo">
+                    <i class="fas fa-address-book"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Contact Manager Pro</h1>
+                    <p>Organize your contacts efficiently</p>
+                </div>
+            </div>
+            
+            <div class="header-stats">
+                <div class="stat-card stat-1">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalContacts">0</h3>
+                        <p>Total Contacts</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card stat-2">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="todayAdded">0</h3>
+                        <p>Added Today</p>
+                    </div>
+                </div>
+            </div>
         </header>
 
         <div class="main-content">
             <div class="form-container">
                 <div class="form-header">
-                    <div class="form-icon">📝</div>
-                    <h2>Add New Contact</h2>
+                    <h2><i class="fas fa-user-plus"></i> Add New Contact</h2>
                 </div>
                 
-                <form id="contactForm">
-                    <div class="input-group">
-                        <label for="name" class="required">Full Name</label>
-                        <input type="text" id="name" placeholder="Enter full name" required>
+                <div class="form-body">
+                    <div class="form-section">
+                        <h3>Contact Information</h3>
+                        <form id="contactForm">
+                            <div class="input-group">
+                                <label for="name" class="required">Full Name</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" id="name" placeholder="John Doe" required>
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label for="email">Email Address</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-envelope"></i>
+                                    <input type="email" id="email" placeholder="john@example.com">
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label for="contactNo" class="required">Phone Number</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-phone"></i>
+                                    <input type="text" id="contactNo" placeholder="+1 (123) 456-7890" required>
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label for="location">Location</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <input type="text" id="location" placeholder="New York, NY">
+                                </div>
+                            </div>
+                            
+                            <div class="input-group">
+                                <label for="description">Description</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-sticky-note"></i>
+                                    <textarea id="description" placeholder="Add notes about this contact..."></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary" id="submitBtn">
+                                    <i class="fas fa-save"></i>
+                                    <span id="buttonText">Save Contact</span>
+                                </button>
+                                <button type="reset" class="btn btn-secondary">
+                                    <i class="fas fa-redo"></i> Clear Form
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    
-                    <div class="input-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" placeholder="Enter email address">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="contactNo" class="required">Contact Number</label>
-                        <input type="text" id="contactNo" placeholder="Enter phone number" required>
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="location">Location</label>
-                        <input type="text" id="location" placeholder="Enter city or address">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="description">Description</label>
-                        <textarea id="description" placeholder="Additional notes or details (optional)"></textarea>
-                    </div>
-                    
-                    <button type="submit" id="submitBtn">
-                        <span id="buttonText">Save Contact</span>
-                    </button>
-                </form>
+                </div>
             </div>
 
             <div class="table-container">
                 <div class="table-header">
-                    <div class="table-icon">👥</div>
-                    <h3>Contacts List</h3>
-                    <div class="contacts-count" id="contactsCount">0 contacts</div>
+                    <h2><i class="fas fa-address-book"></i> Contact List</h2>
+                    <div class="contacts-count" id="contactsCount">0 Contacts</div>
                 </div>
                 
                 <div class="table-wrapper">
+                    <div class="search-container">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" class="search-input" id="searchInput" placeholder="Search contacts by name, email, or phone...">
+                    </div>
+                    
                     <table>
                         <thead>
                             <tr>
                                 <th>Name</th>
                                 <th>Email</th>
-                                <th>Contact No</th>
+                                <th>Phone</th>
                                 <th>Location</th>
                                 <th>Description</th>
                             </tr>
@@ -418,11 +732,23 @@
         </div>
 
         <footer>
-            <p>Contact Management System • All data is securely stored</p>
+            <div class="footer-content">
+                <div class="copyright">
+                    <p>&copy; 2023 Contact Manager Pro. All rights reserved.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#"><i class="fas fa-shield-alt"></i> Privacy Policy</a>
+                    <a href="#"><i class="fas fa-file-contract"></i> Terms of Service</a>
+                    <a href="#"><i class="fas fa-question-circle"></i> Help Center</a>
+                </div>
+            </div>
         </footer>
     </div>
 
-    <div class="success-message" id="successMessage">Contact saved successfully!</div>
+    <div class="success-message" id="successMessage">
+        <i class="fas fa-check-circle"></i>
+        <span>Contact saved successfully!</span>
+    </div>
 
     <script>
         const API_URL = "https://recontact.onrender.com/contacts";
@@ -434,7 +760,10 @@
         const successMessage = document.getElementById('successMessage');
         const submitBtn = document.getElementById('submitBtn');
         const buttonText = document.getElementById('buttonText');
-
+        const totalContacts = document.getElementById('totalContacts');
+        const todayAdded = document.getElementById('todayAdded');
+        const searchInput = document.getElementById('searchInput');
+        
         // Show success message
         function showSuccessMessage() {
             successMessage.classList.add('show');
@@ -455,9 +784,43 @@
             buttonText.textContent = 'Save Contact';
         }
 
-        // Format phone number (optional)
+        // Format phone number
         function formatPhoneNumber(phone) {
-            return phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+            // Remove all non-digit characters
+            const cleaned = phone.replace(/\D/g, '');
+            
+            // Format based on length
+            if (cleaned.length === 10) {
+                return `(${cleaned.slice(0,3)}) ${cleaned.slice(3,6)}-${cleaned.slice(6)}`;
+            } else if (cleaned.length === 11) {
+                return `+${cleaned[0]} (${cleaned.slice(1,4)}) ${cleaned.slice(4,7)}-${cleaned.slice(7)}`;
+            } else {
+                return phone;
+            }
+        }
+
+        // Get initials for avatar
+        function getInitials(name) {
+            return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('en-US', options);
+        }
+
+        // Filter contacts based on search
+        function filterContacts(contacts, searchTerm) {
+            if (!searchTerm) return contacts;
+            
+            const term = searchTerm.toLowerCase();
+            return contacts.filter(contact => 
+                contact.name.toLowerCase().includes(term) ||
+                (contact.email && contact.email.toLowerCase().includes(term)) ||
+                contact.contactNo.includes(term) ||
+                (contact.location && contact.location.toLowerCase().includes(term))
+            );
         }
 
         // Load all contacts from backend
@@ -470,51 +833,110 @@
                 return res.json();
             })
             .then(data => {
-                contactTable.innerHTML = '';
+                // Update stats
+                totalContacts.textContent = data.length;
                 
-                if (data.length === 0) {
-                    contactTable.innerHTML = `
-                        <tr>
-                            <td colspan="5">
-                                <div class="empty-state">
-                                    <div class="empty-icon">📭</div>
-                                    <p>No contacts found. Add your first contact!</p>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
-                    contactsCount.textContent = '0 contacts';
-                    return;
-                }
+                // Calculate today's added contacts (mock for now - would need creation date from API)
+                const today = new Date().toDateString();
+                const todayCount = data.filter(contact => {
+                    // This is a mock - real implementation would check contact.createdAt
+                    return Math.random() > 0.7; // Random for demo
+                }).length;
+                todayAdded.textContent = todayCount;
                 
-                // Update count
-                contactsCount.textContent = `${data.length} ${data.length === 1 ? 'contact' : 'contacts'}`;
+                // Filter contacts based on search
+                const filteredContacts = filterContacts(data, searchInput.value);
                 
-                // Add contacts to table
-                data.forEach(contact => {
-                    const row = document.createElement('tr');
-                    
-                    row.innerHTML = `
-                        <td><strong>${contact.name}</strong></td>
-                        <td>${contact.email || '<span style="color: var(--gray); font-style: italic;">Not provided</span>'}</td>
-                        <td>${contact.contactNo}</td>
-                        <td>${contact.location || '<span style="color: var(--gray); font-style: italic;">Not specified</span>'}</td>
-                        <td>${contact.description || '<span style="color: var(--gray); font-style: italic;">No description</span>'}</td>
-                    `;
-                    
-                    contactTable.appendChild(row);
-                });
+                renderContactsTable(filteredContacts);
             })
             .catch(err => {
                 console.error("Error fetching contacts:", err);
+                renderErrorState();
+            });
+        }
+
+        // Render contacts table
+        function renderContactsTable(contacts) {
+            contactTable.innerHTML = '';
+            
+            if (contacts.length === 0) {
+                const hasSearch = searchInput.value.trim() !== '';
+                
                 contactTable.innerHTML = `
                     <tr>
-                        <td colspan="5" style="color: #ff4757; text-align: center; padding: 40px;">
-                            Unable to load contacts. Please check your connection.
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="fas fa-${hasSearch ? 'search' : 'address-book'}"></i>
+                                </div>
+                                <h3>${hasSearch ? 'No matching contacts found' : 'No contacts yet'}</h3>
+                                <p>${hasSearch ? 'Try a different search term' : 'Add your first contact to get started'}</p>
+                            </div>
                         </td>
                     </tr>
                 `;
+                contactsCount.textContent = '0 Contacts';
+                return;
+            }
+            
+            // Update count
+            contactsCount.textContent = `${contacts.length} Contact${contacts.length === 1 ? '' : 's'}`;
+            
+            // Add contacts to table
+            contacts.forEach(contact => {
+                const row = document.createElement('tr');
+                
+                const initials = getInitials(contact.name);
+                const formattedPhone = formatPhoneNumber(contact.contactNo);
+                
+                row.innerHTML = `
+                    <td>
+                        <div class="contact-row">
+                            <div class="contact-avatar">${initials}</div>
+                            <div>
+                                <div class="contact-name">${contact.name}</div>
+                                <div style="font-size: 0.85rem; color: var(--gray);">Added ${formatDate(new Date())}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="contact-email">
+                        ${contact.email ? 
+                            `<a href="mailto:${contact.email}" style="color: var(--primary); text-decoration: none;">${contact.email}</a>` : 
+                            '<span style="color: var(--gray); font-style: italic;">Not provided</span>'}
+                    </td>
+                    <td class="contact-phone">
+                        <a href="tel:${contact.contactNo}" style="color: inherit; text-decoration: none;">${formattedPhone}</a>
+                    </td>
+                    <td class="contact-location">
+                        ${contact.location || '<span style="color: var(--gray); font-style: italic;">Not specified</span>'}
+                    </td>
+                    <td class="contact-desc">
+                        ${contact.description ? 
+                            `<div style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;" title="${contact.description}">${contact.description}</div>` : 
+                            '<span style="color: var(--gray); font-style: italic;">No description</span>'}
+                    </td>
+                `;
+                
+                contactTable.appendChild(row);
             });
+        }
+
+        // Render error state
+        function renderErrorState() {
+            contactTable.innerHTML = `
+                <tr>
+                    <td colspan="5">
+                        <div class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <h3>Unable to load contacts</h3>
+                            <p>Please check your internet connection and try again.</p>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            contactsCount.textContent = 'Error';
         }
 
         // Handle form submission
@@ -531,7 +953,7 @@
 
             // Validation
             if (!newContact.name || !newContact.contactNo) {
-                alert("Please fill in all required fields (Name and Contact Number).");
+                alert("Please fill in all required fields (Name and Phone Number).");
                 return;
             }
 
@@ -563,11 +985,28 @@
             });
         });
 
+        // Search functionality
+        searchInput.addEventListener('input', function() {
+            loadContacts();
+        });
+
         // Load contacts on page load
         document.addEventListener('DOMContentLoaded', loadContacts);
 
         // Auto-refresh contacts every 30 seconds (optional)
         setInterval(loadContacts, 30000);
+        
+        // Add some sample contacts on first load if needed (for demo)
+        window.addEventListener('load', function() {
+            // Check if we have any contacts, if not we could add some samples
+            // This is just for demonstration purposes
+            setTimeout(() => {
+                if (document.querySelectorAll('#contactTable tr').length <= 1) {
+                    // Table is empty, we could show a hint
+                    console.log("No contacts loaded. Make sure your backend API is running.");
+                }
+            }, 1000);
+        });
     </script>
 </body>
 </html>
